@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { Mongo } from '../database/mongo.js';
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
+import { text } from 'stream/consumers';
 
 const collectionName = "users";
 
@@ -17,7 +18,7 @@ passport.use(new localStrategy.Strategy({ usernameField: "email"}, async (email,
         return callback(null, false)
     }
 
-    const saltBuffer = user.salt.saltBuffer;
+    const saltBuffer = user.salt.buffer;
 
     crypto.pbkdf2(password, saltBuffer, 310000, 16, 'sha256', (err, hashedPassword) => {
         if (err) {
@@ -91,6 +92,39 @@ authRouter.post('/singup', async (req, res) => {
             });
         }
     });
+});
+
+authRouter.post("/login", async(req, res) => {
+    passport.authenticate('local', (err, user) => {
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                statusCode: 500,
+                body:{
+                    text:"Error on login",
+                    err: err
+                },
+                
+            })
+        }
+
+        if(!user) {
+            return res.status(400).send({
+                success: false,
+                statusCode: 400,
+                body: "User not found"
+            });
+        }
+
+        const token = jwt.sign(user, 'secret');
+        return res.status(200).send({
+            success: true,
+            statusCode: 200,
+            body: "User logged in successfully",
+            token,
+            user,
+        });
+    })(req, res);    
 });
 
 export default authRouter;
