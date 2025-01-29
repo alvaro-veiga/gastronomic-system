@@ -63,7 +63,7 @@ authRouter.post('/singup', async (req, res) => {
             });
         }
 
-        const result = Mongo.database
+        const result = await Mongo.database
         .collection(collectionName)
         .insertOne({
             email: req.body.email,
@@ -112,7 +112,7 @@ authRouter.post("/login", async(req, res) => {
             return res.status(400).send({
                 success: false,
                 statusCode: 400,
-                body: "User not found"
+                body: "Credentials are not correct"
             });
         }
 
