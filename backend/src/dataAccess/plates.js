@@ -13,7 +13,7 @@ export default class PlatesDataAccess {
         return result;
     }
 
-    async getAvilablePlates() {
+    async getAviliablePlates() {
         const result = await Mongo.database
         .collection(collectionName)
         .find({ avilable: true})

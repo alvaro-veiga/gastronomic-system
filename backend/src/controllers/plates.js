@@ -15,6 +15,24 @@ export default class PlatessController {
         }
     }
 
+    async getAviliablePlates() {
+        try {
+            const plates = await this.dataAcess.getAviliablePlates();
+            return ok(plates);
+        } catch(error) {
+            return serverError(error)
+        }
+    }
+
+    async addPlates(platesData) {
+        try {
+            const result = await this.dataAcess.addPlate(platesData);
+            return ok(result);
+        } catch(error) {
+            return serverError(error)
+        }
+    }
+
     async deletePlates(platesId) {
         try {
             const result = await this.dataAcess.deletePlates(platesId);

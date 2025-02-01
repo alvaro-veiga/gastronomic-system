@@ -1,0 +1,105 @@
+[
+    {
+      "name": "Squid Stew with Peas",
+      "price": "10.99",
+      "available": false,
+      "description": "Fresh squid slowly cooked in a stew with fresh peas and tomatoes reveal an explosion of flavors.",
+      "ingredients": [
+        "Fresh squid",
+        "Fresh peas",
+        "Tomatoes"
+      ],
+      "category": "First"
+    },
+    {
+      "name": "Tortellini in Chicken Broth",
+      "price": 8.99,
+      "available": true,
+      "description": "Our homemade tortellini, filled with meat, float in a warm chicken broth, bringing you comfort.",
+      "ingredients": [
+        "Homemade tortellini",
+        "Chicken broth"
+      ],
+      "category": "First"
+    },
+    {
+      "name": "Shrimp and Vegetable Salad",
+      "price": 10.99,
+      "available": true,
+      "description": "A fresh mixed salad with cooked shrimp, seasonal vegetables, and a secret dressing that enhances every bite.",
+      "ingredients": [
+        "Cooked shrimp",
+        "Seasonal vegetables",
+        "Salad dressing"
+      ],
+      "category": "First"
+    },
+    {
+      "name": "Grilled Salmon with Lemon Butter",
+      "price": 15.99,
+      "available": true,
+      "description": "Perfectly grilled salmon fillet topped with a tangy lemon butter sauce.",
+      "ingredients": [
+        "Salmon fillet",
+        "Lemon",
+        "Butter",
+        "Garlic"
+      ],
+      "category": "Main"
+    },
+    {
+      "name": "Beef Stroganoff",
+      "price": 12.99,
+      "available": true,
+      "description": "Classic beef stroganoff cooked with creamy mushroom sauce and served over egg noodles.",
+      "ingredients": [
+        "Beef strips",
+        "Mushrooms",
+        "Onions",
+        "Cream",
+        "Egg noodles"
+      ],
+      "category": "Main"
+    },
+    {
+      "name": "Vegetarian Lasagna",
+      "price": 11.49,
+      "available": true,
+      "description": "Layers of pasta, ricotta, spinach, and marinara sauce, baked to perfection.",
+      "ingredients": [
+        "Lasagna noodles",
+        "Ricotta cheese",
+        "Spinach",
+        "Marinara sauce"
+      ],
+      "category": "Main"
+    },
+    {
+      "name": "Chocolate Lava Cake",
+      "price": 6.99,
+      "available": true,
+      "description": "A rich chocolate cake with a warm, gooey center that melts in your mouth.",
+      "ingredients": [
+        "Dark chocolate",
+        "Flour",
+        "Eggs",
+        "Butter",
+        "Sugar"
+      ],
+      "category": "Dessert"
+    },
+    {
+      "name": "Tiramisu",
+      "price": 7.49,
+      "available": true,
+      "description": "Classic Italian dessert made with espresso-soaked ladyfingers, mascarpone cheese, and cocoa powder.",
+      "ingredients": [
+        "Ladyfingers",
+        "Espresso",
+        "Mascarpone cheese",
+        "Cocoa powder"
+      ],
+      "category": "Dessert"
+    }
+  ]
+  
