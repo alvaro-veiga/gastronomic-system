@@ -1,7 +1,7 @@
 import PlatesDataAccess from "../dataAccess/plates.js";
 import { ok, serverError} from "../helpers/httpResponse.js";
 
-export default class PlatessController {
+export default class PlatesController {
     constructor() {
         this.dataAcess = new PlatesDataAccess();
     }
