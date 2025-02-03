@@ -13,10 +13,10 @@ export default class PlatesDataAccess {
         return result;
     }
 
-    async getAviliablePlates() {
+    async getAvailablePlates() {
         const result = await Mongo.database
         .collection(collectionName)
-        .find({ avilable: true})
+        .find({ available: true})
         .toArray();
 
         return result;
