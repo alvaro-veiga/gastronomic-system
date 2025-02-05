@@ -15,6 +15,15 @@ export default class OrdersController {
         }
     }
 
+    async getOrdersByUserId(userId) {
+        try {
+            const orders = await this.dataAcess.getOrdersByUserId(userId);
+            return ok(orders);
+        } catch(error) {
+            return serverError(error)
+        }
+    }
+
     async addOrders(ordersData) {
         try {
             const result = await this.dataAcess.addOrder(ordersData);
