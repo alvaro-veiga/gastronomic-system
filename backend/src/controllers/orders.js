@@ -17,7 +17,7 @@ export default class OrdersController {
 
     async addOrders(ordersData) {
         try {
-            const result = await this.dataAcess.addPlate(ordersData);
+            const result = await this.dataAcess.addOrder(ordersData);
             return ok(result);
         } catch(error) {
             return serverError(error)

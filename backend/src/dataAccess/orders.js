@@ -14,9 +14,28 @@ export default class OrdersDataAccess {
     }
 
     async addOrder(orderData) {
-        const result = await Mongo.database
+        const { items, ...orderDataRest } = orderData
+        
+        orderDataRest.createdAt = new Date()
+        orderDataRest.pickupStatus = 'Pending'
+        orderDataRest.userId = new ObjectId(orderDataRest.userId)
+
+        const newOrder = await Mongo.database
         .collection(collectionName)
-        .insertOne(orderData);
+        .insertOne(orderDataRest)
+
+        if (!newOrder.insertedId) {
+            throw new Error("Order cannot be inserted")
+        }
+
+        items.map((item) =>{
+            item.plateId = new ObjectId(item.plateId)
+            item.orderId = new ObjectId(item.orderId)
+        })
+
+        const result = await Mongo.database
+        .collection('ordeItems')
+        .insertMany(orderData);
 
         return result;
     }
