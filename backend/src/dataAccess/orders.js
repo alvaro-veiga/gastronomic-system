@@ -7,7 +7,41 @@ export default class OrdersDataAccess {
     async getOrders() {
         const result = await Mongo.database
         .collection(collectionName)
-        .find({})
+        .aggregate([ 
+            {
+                $lookup: {
+                    from: 'orderItems',
+                    localField: '_id',
+                    foreignField: 'orderId',
+                    as: 'orderItems'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userDetails'
+                }
+            },
+            {
+                $unwind: '$orderItems'
+            },
+            {
+                $lookup: {
+                    from: 'plates',
+                    localField: 'orderItems.plateId',
+                    foreignField: '_id',
+                    as: 'orderItems.itemDetails'
+                }
+            },
+            {
+                $project: {
+                    "userDetails.password": 0,
+                    "userDetails.salt":0
+                }
+            }
+        ])
         .toArray();
 
         return result;
@@ -15,7 +49,7 @@ export default class OrdersDataAccess {
 
     async addOrder(orderData) {
         const { items, ...orderDataRest } = orderData
-        
+
         orderDataRest.createdAt = new Date()
         orderDataRest.pickupStatus = 'Pending'
         orderDataRest.userId = new ObjectId(orderDataRest.userId)
@@ -24,20 +58,20 @@ export default class OrdersDataAccess {
         .collection(collectionName)
         .insertOne(orderDataRest)
 
-        if (!newOrder.insertedId) {
-            throw new Error("Order cannot be inserted")
+        if(!newOrder.insertedId) {
+            throw new Error('Order cannot be inserted')
         }
 
-        items.map((item) =>{
+        items.map((item) => {
             item.plateId = new ObjectId(item.plateId)
-            item.orderId = new ObjectId(item.orderId)
+            item.orderId = new ObjectId(newOrder.insertedId)
         })
 
         const result = await Mongo.database
-        .collection('ordeItems')
-        .insertMany(orderData);
+        .collection('orderItems')
+        .insertMany(items)
 
-        return result;
+        return result
     }
 
     async deleteOrders(ordersId) {
