@@ -4,6 +4,9 @@
     background-color: #000546;
     height: 96px;
 }
+img {
+    cursor: auto;
+}
 .navbarItems {
     display: flex;
     justify-content: space-between;
