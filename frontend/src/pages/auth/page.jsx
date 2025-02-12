@@ -65,7 +65,7 @@ export default function Auth() {
     if (formType === 'signup') {
         return(
             <div className={styles.authPageContainer}>
-                <h1>SingUp</h1>
+                <h1>Registro</h1>
                 <button onClick={handleChangeFormType}>Ja tem conta? clique aqui</button>
                 <form onSubmit={handleSubmitForm}>
                     <TextField 
