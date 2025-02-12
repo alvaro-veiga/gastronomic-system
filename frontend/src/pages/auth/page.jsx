@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './page.module.css'
 import { TextField, Button } from '@mui/material'
+import authServices from '../../services/auth'
 
 export default function Auth() {
     const [ formType, setFormType] = useState('login')
     const [ formData, setFormData] = useState(null)
-    
+    const { login, signup, authLoading } = authServices()
+
+    useEffect(()=>{
+        setFormData(null)
+    },[formData])
+
     const handleChangeFormType = () => {
         setFormData(null)
         if (formType === 'login') {
@@ -27,15 +33,22 @@ export default function Auth() {
 
         switch (formType) {
             case 'login':
+                login(formData)
                 break
             case 'signup':
                 if (formData.password !== formData.confirmPassword) {
                     console.log('As senhas são diferentes')
+                    return
                 }
+                signup(formData)
                 break
         }
     }
-
+    if (authLoading) {
+        return(
+            <h1>Loading...</h1>
+        )
+    }
     if (formType === 'login') {
         return(
             <div className={styles.authPageContainer}>

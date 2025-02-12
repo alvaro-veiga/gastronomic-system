@@ -39,7 +39,7 @@ passport.use(new localStrategy.Strategy({ usernameField: "email"}, async (email,
 
 const authRouter = express.Router();
 
-authRouter.post('/singup', async (req, res) => {
+authRouter.post('/signup', async (req, res) => {
     const checkUser = await Mongo.database
     .collection(collectionName)
     .findOne({ email: req.body.email });
