@@ -1,13 +1,13 @@
-import { Mongo } from "../database/mongo.js";
-import { ObjectId } from "mongodb";
+import { Mongo } from "../database/mongo.js"
+import { ObjectId } from 'mongodb'
 
-const collectionName = "orders";
+const collectionName = 'orders'
 
 export default class OrdersDataAccess {
     async getOrders() {
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection(collectionName)
-        .aggregate([ 
+        .aggregate([
             {
                 $lookup: {
                     from: 'orderItems',
@@ -25,6 +25,12 @@ export default class OrdersDataAccess {
                 }
             },
             {
+                $project: {
+                    'userDetails.password': 0,
+                    'userDetails.salt': 0,
+                }
+            },
+            {
                 $unwind: '$orderItems'
             },
             {
@@ -36,33 +42,27 @@ export default class OrdersDataAccess {
                 }
             },
             {
-                $project: {
-                    "userDetails.password": 0,
-                    "userDetails.salt":0
-                }
-            },
-            {
                 $group: {
                     _id: '$_id',
-                    userDetails: { $first: '$userDetails'},
-                    orderItems: {$push: 'orderItems'},
-                    pickupStatus: {$first: '$pickupStatus'},
-                    pickupTime: { $first: '$pickupTime'}
+                    userDetails: { $first: '$userDetails' },
+                    orderItems: { $push: '$orderItems' },
+                    pickupStatus: { $first: '$pickupStatus' },
+                    pickupTime: { $first: '$pickupTime' }
                 }
             }
         ])
-        .toArray();
+        .toArray()
 
-        return result;
+        return result
     }
 
     async getOrdersByUserId(userId) {
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection(collectionName)
-        .aggregate([ 
+        .aggregate([
             {
-                $match: { userId: new ObjectId(userId)}
-            },
+                $match: { userId: new ObjectId(userId) }
+            }, 
             {
                 $lookup: {
                     from: 'orderItems',
@@ -80,6 +80,12 @@ export default class OrdersDataAccess {
                 }
             },
             {
+                $project: {
+                    'userDetails.password': 0,
+                    'userDetails.salt': 0,
+                }
+            },
+            {
                 $unwind: '$orderItems'
             },
             {
@@ -91,24 +97,18 @@ export default class OrdersDataAccess {
                 }
             },
             {
-                $project: {
-                    "userDetails.password": 0,
-                    "userDetails.salt":0
-                }
-            },
-            {
                 $group: {
                     _id: '$_id',
-                    userDetails: { $first: '$userDetails'},
-                    orderItems: {$push: 'orderItems'},
-                    pickupStatus: {$first: '$pickupStatus'},
-                    pickupTime: { $first: '$pickupTime'}
+                    userDetails: { $first: '$userDetails' },
+                    orderItems: { $push: '$orderItems' },
+                    pickupStatus: { $first: '$pickupStatus' },
+                    pickupTime: { $first: '$pickupTime' }
                 }
             }
         ])
-        .toArray();
+        .toArray()
 
-        return result;
+        return result
     }
 
     async addOrder(orderData) {
@@ -118,7 +118,7 @@ export default class OrdersDataAccess {
         orderDataRest.pickupStatus = 'Pending'
         orderDataRest.userId = new ObjectId(orderDataRest.userId)
 
-        const newOrder = await Mongo.database
+        const newOrder = await Mongo.db
         .collection(collectionName)
         .insertOne(orderDataRest)
 
@@ -131,39 +131,40 @@ export default class OrdersDataAccess {
             item.orderId = new ObjectId(newOrder.insertedId)
         })
 
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection('orderItems')
         .insertMany(items)
 
         return result
     }
 
-    async deleteOrders(ordersId) {
+    async deleteOrder (orderId) {
 
-        const itemsToDelete = await Mongo.database
+        const itemsToDelete = await Mongo.db
         .collection('orderItems')
-        .deleteMany({ordersId: new ObjectId(ordersId)})
+        .deleteMany({ orderId: new ObjectId(orderId) })
 
-        const orderToDelete = await Mongo.database
+        const orderToDelete = await Mongo.db
         .collection(collectionName)
-        .findOneAndDelete({ _id: new ObjectId(ordersId) });
-        
+        .findOneAndDelete({ _id: new ObjectId(orderId) })
+
         const result = {
             itemsToDelete,
             orderToDelete
         }
 
-        return result;
+        return result
     }
-    async updateOrders(ordersId, ordersData) {
 
-        const result = await Mongo.database
+    async updateOrder(orderId, orderData) {
+        const result = await Mongo.db
         .collection(collectionName)
         .findOneAndUpdate(
-            { _id: new ObjectId(ordersId) },
-            { $set: ordersData },
-        );
-        
-        return result;
+            { _id: new ObjectId(orderId) },
+            { $set: orderData }
+        )
+
+        return result
     }
+    
 }

@@ -1,51 +1,57 @@
-import OrdersDataAccess from "../dataAccess/orders.js";
-import { ok, serverError} from "../helpers/httpResponse.js";
+import OrdersDataAccess from "../dataAccess/orders.js"
+import { ok, serverError } from "../helpers/httpResponses.js"
 
-export default class OrdersController {
+export default class OrdersControllers {
     constructor() {
-        this.dataAcess = new OrdersDataAccess();
+        this.dataAccess = new OrdersDataAccess()
     }
 
     async getOrders() {
         try {
-            const orders = await this.dataAcess.getOrders();
-            return ok(orders);
-        } catch(error) {
+            const orders = await this.dataAccess.getOrders()
+
+            return ok(orders)
+        } catch (error) {
             return serverError(error)
         }
     }
 
     async getOrdersByUserId(userId) {
         try {
-            const orders = await this.dataAcess.getOrdersByUserId(userId);
-            return ok(orders);
-        } catch(error) {
+            const orders = await this.dataAccess.getOrdersByUserId(userId)
+
+            return ok(orders)
+        } catch (error) {
             return serverError(error)
         }
     }
 
-    async addOrders(ordersData) {
+    async addOrder(orderData) {
         try {
-            const result = await this.dataAcess.addOrder(ordersData);
-            return ok(result);
-        } catch(error) {
+            const result = await this.dataAccess.addOrder(orderData)
+
+            return ok(result)
+        } catch (error) {
             return serverError(error)
         }
     }
 
-    async deleteOrders(ordersId) {
+    async deleteOrder(orderId) {
         try {
-            const result = await this.dataAcess.deleteOrders(ordersId);
-            return ok(result);
-        } catch(error) {
+            const result = await this.dataAccess.deleteOrder(orderId)
+
+            return ok(result)
+        } catch (error) {
             return serverError(error)
         }
     }
-    async updateOrders(ordersId, ordersData) {
+
+    async updateOrder(orderId, orderData) {
         try {
-            const result = await this.dataAcess.updateOrders(ordersId, ordersData);
-            return ok(result);
-        } catch(error) {
+            const result = await this.dataAccess.updateOrder(orderId, orderData)
+
+            return ok(result)
+        } catch (error) {
             return serverError(error)
         }
     }

@@ -1,110 +1,110 @@
-import express from 'express';
-import passport from 'passport';
-import localStrategy from 'passport-local';
-import crypto from 'crypto';
-import { Mongo } from '../database/mongo.js';
-import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
-import { text } from 'stream/consumers';
+import express from "express"
+import passport from 'passport'
+import LocalStrategy from 'passport-local'
+import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
+import { Mongo } from "../database/mongo.js"
+import { ObjectId } from 'mongodb'
 
-const collectionName = "users";
+const collectionName = 'users'
 
-passport.use(new localStrategy.Strategy({ usernameField: "email"}, async (email, password, callback) => {
-    const user = await Mongo.database
+const authRouter = express.Router()
+
+passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, callback) => {
+    const user = await Mongo.db
     .collection(collectionName)
-    .findOne({ email: email });
+    .findOne({ email: email })
 
-    if (!user) {
+    if(!user) {
         return callback(null, false)
     }
 
-    const saltBuffer = user.salt.buffer;
+    const saltBuffer = user.salt.buffer
 
-    crypto.pbkdf2(password, saltBuffer, 310000, 16, 'sha256', (err, hashedPassword) => {
-        if (err) {
-            return callback(err, false);
+    crypto.pbkdf2(password, saltBuffer, 310000, 16, 'sha256', (error, hashedPassword) => {
+        if(error) {
+            return callback(error)
         }
 
-        const userPasswordBuffer = Buffer.from(user.password.buffer);
+        const userPassowrdBuffer = Buffer.from(user.password.buffer)
 
-        if (!crypto.timingSafeEqual(userPasswordBuffer, hashedPassword)) {
-            return callback(null, false);
+        if(!crypto.timingSafeEqual(userPassowrdBuffer, hashedPassword)) {
+            return callback(null, false)
         }
 
-        const { password, salt, ...rest} = user;
+        const { password, salt, ...rest } = user
 
-        return callback(null, rest);
-    });
-}));
+        return callback(null, rest)
+    })
+}))
 
-const authRouter = express.Router();
-
-authRouter.post('/signup', async (req, res) => {
-    const checkUser = await Mongo.database
+authRouter.post('/signup', async(req, res) => {
+    const checkUser = await Mongo.db
     .collection(collectionName)
-    .findOne({ email: req.body.email });
+    .findOne({ email: req.body.email })
 
-    if (checkUser) {
+    if(checkUser) {
         return res.status(500).send({
             success: false,
             statusCode: 500,
-            body: "User already exists"
-        });
+            body: {
+                text: 'User already exists'
+            }
+        })
     }
 
-    const salt = crypto.randomBytes(16);
-    crypto.pbkdf2(req.body.password, salt, 310000, 16, 'sha256', async (err, hashedPassword) => {
-        if (err) {
-            return res.status(500).send({
+    const salt = crypto.randomBytes(16)
+    
+    crypto.pbkdf2(req.body.password, salt, 310000, 16, 'sha256', async (error, hashedPassword) => {
+        if(error) {
+            res.status(500).send({
                 success: false,
                 statusCode: 500,
-                body: "Error on crypto password",
-                err : err
-            });
+                body: {
+                    text: 'User already exists'
+                }
+            })
         }
 
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection(collectionName)
         .insertOne({
+            fullname: req.body.fullname,
             email: req.body.email,
             password: hashedPassword,
-            salt
+            salt,
         })
 
-        if (result.insertedId) {
-            const user = await Mongo.database
+        if(result.insertedId) {
+            const user = await Mongo.db
             .collection(collectionName)
-            .findOne({
-                _id: new ObjectId(result.insertedId)
-            })
+            .findOne({ _id: new ObjectId(result.insertedId) }, { projection: { password: 0, salt: 0 } })
 
-            const token =jwt.sign(user, 'secret')
+            const token = jwt.sign(user, 'secret')
 
             return res.send({
                 success: true,
                 statusCode: 200,
                 body: {
-                    text: "User created successfully",
-                    token,
+                    text: 'User registered',
                     user,
-                    logged: true,
+                    token
                 }
-            });
+            })
         }
-    });
-});
+    })
+})
 
-authRouter.post("/login", async(req, res) => {
-    passport.authenticate('local', (err, user) => {
-        if (err) {
+authRouter.post('/login', (req, res) => {
+    passport.authenticate('local', (error, user) => {
+        if(error) {
             return res.status(500).send({
                 success: false,
                 statusCode: 500,
-                body:{
-                    text:"Error on login",
-                    err: err
-                },
-                
+                body: {
+                    text: 'Error during authentication',
+                    error
+                }
             })
         }
 
@@ -112,19 +112,23 @@ authRouter.post("/login", async(req, res) => {
             return res.status(400).send({
                 success: false,
                 statusCode: 400,
-                body: "Credentials are not correct"
-            });
+                body: {
+                    text: 'Credentials are not correct',
+                }
+            })  
         }
 
-        const token = jwt.sign(user, 'secret');
+        const token = jwt.sign(user, 'secret')
         return res.status(200).send({
             success: true,
             statusCode: 200,
-            body: "User logged in successfully",
-            token,
-            user,
-        });
-    })(req, res);    
-});
+            body: {
+                text: 'User logged in correctly',
+                user,
+                token
+            }
+        })  
+    })(req, res)
+})
 
-export default authRouter;
+export default authRouter

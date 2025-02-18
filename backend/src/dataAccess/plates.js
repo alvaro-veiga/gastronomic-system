@@ -1,51 +1,52 @@
-import { Mongo } from "../database/mongo.js";
-import { ObjectId } from "mongodb";
+import { Mongo } from "../database/mongo.js"
+import { ObjectId } from 'mongodb'
 
-const collectionName = "plates";
+const collectionName = 'plates'
 
 export default class PlatesDataAccess {
     async getPlates() {
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection(collectionName)
-        .find({})
-        .toArray();
+        .find({ })
+        .toArray()
 
-        return result;
+        return result
     }
 
     async getAvailablePlates() {
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection(collectionName)
-        .find({ available: true})
-        .toArray();
+        .find({ available: true })
+        .toArray()
 
-        return result;
+        return result
     }
 
     async addPlate(plateData) {
-        const result = await Mongo.database
+        const result = await Mongo.db
         .collection(collectionName)
-        .insertOne(plateData);
+        .insertOne(plateData)
 
-        return result;
+        return result
     }
 
-    async deletePlates(platesId) {
-        const result = await Mongo.database
+    async deletePlate (plateId) {
+        const result = await Mongo.db
         .collection(collectionName)
-        .findOneAndDelete({ _id: new ObjectId(platesId) });
+        .findOneAndDelete({ _id: new ObjectId(plateId) })
 
-        return result;
+        return result
     }
-    async updatePlates(platesId, platesData) {
 
-        const result = await Mongo.database
+    async updatePlate(plateId, plateData) {
+        const result = await Mongo.db
         .collection(collectionName)
         .findOneAndUpdate(
-            { _id: new ObjectId(platesId) },
-            { $set: platesData },
-        );
-        
-        return result;
+            { _id: new ObjectId(plateId) },
+            { $set: plateData }
+        )
+
+        return result
     }
+    
 }

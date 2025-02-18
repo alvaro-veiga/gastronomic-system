@@ -1,51 +1,57 @@
-import PlatesDataAccess from "../dataAccess/plates.js";
-import { ok, serverError} from "../helpers/httpResponse.js";
+import PlatesDataAccess from "../dataAccess/plates.js"
+import { ok, serverError } from "../helpers/httpResponses.js"
 
-export default class PlatesController {
+export default class PlatesControllers {
     constructor() {
-        this.dataAcess = new PlatesDataAccess();
+        this.dataAccess = new PlatesDataAccess()
     }
 
     async getPlates() {
         try {
-            const plates = await this.dataAcess.getPlates();
-            return ok(plates);
-        } catch(error) {
+            const plates = await this.dataAccess.getPlates()
+
+            return ok(plates)
+        } catch (error) {
             return serverError(error)
         }
     }
 
     async getAvailablePlates() {
         try {
-            const plates = await this.dataAcess.getAvailablePlates();
-            return ok(plates);
-        } catch(error) {
+            const plates = await this.dataAccess.getAvailablePlates()
+
+            return ok(plates)
+        } catch (error) {
             return serverError(error)
         }
     }
 
-    async addPlates(platesData) {
+    async addPlate(plateData) {
         try {
-            const result = await this.dataAcess.addPlate(platesData);
-            return ok(result);
-        } catch(error) {
+            const result = await this.dataAccess.addPlate(plateData)
+
+            return ok(result)
+        } catch (error) {
             return serverError(error)
         }
     }
 
-    async deletePlates(platesId) {
+    async deletePlate(plateId) {
         try {
-            const result = await this.dataAcess.deletePlates(platesId);
-            return ok(result);
-        } catch(error) {
+            const result = await this.dataAccess.deletePlate(plateId)
+
+            return ok(result)
+        } catch (error) {
             return serverError(error)
         }
     }
-    async updatePlates(platesId, platesData) {
+
+    async updatePlate(plateId, plateData) {
         try {
-            const result = await this.dataAcess.updatePlates(platesId, platesData);
-            return ok(result);
-        } catch(error) {
+            const result = await this.dataAccess.updatePlate(plateId, plateData)
+
+            return ok(result)
+        } catch (error) {
             return serverError(error)
         }
     }
