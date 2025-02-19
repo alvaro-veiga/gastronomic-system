@@ -6,6 +6,7 @@ import { format, parseISO } from 'date-fns';
 import styles from './page.module.css'
 import { LuLogOut, LuTimer, LuCircleCheckBig, LuCircleAlert } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import Loading from "../loading/page";
 
 const formatDate = (isoString) => {
     return format(parseISO(isoString), "dd/MM/yyyy HH:mm");
@@ -28,7 +29,7 @@ export default function Profile() {
     }, [authData, refetchOrders]);
 
     if (orderLoading) {
-        return( <h1>loading...</h1>)
+        return( <Loading/>)
     }
 
     const handleLogout = () => {
