@@ -4,6 +4,7 @@ import authServices from "../../services/auth"
 import orderServices from "../../services/orders"
 import { format, parseISO } from 'date-fns';
 import styles from './page.module.css'
+import { LuLogOut, LuTimer, LuCircleCheckBig, LuCircleAlert } from "react-icons/lu";
 
 const formatDate = (isoString) => {
     return format(parseISO(isoString), "dd/MM/yyyy HH:mm");
@@ -42,12 +43,14 @@ export default function Profile() {
                 <h1>{authData?.user?.fullname}</h1>
                 <h3>{authData?.user?.email}</h3>
             </div>
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout}>Logout<LuLogOut/></button>
             {ordersList.length > 0 ?
                 <div className={styles.ordersContainer}>
                     {ordersList.map((order) => (
                         <div key={order._id} className={styles.orderContainer}>
-                            <p>{order.pickupStatus}</p>
+                            {order.pickupStatus === 'Pendente' ? <p className={`${styles.pickupStatus} ${styles.pending}`}><LuTimer />{order.pickupStatus}</p> : null}
+                            {order.pickupStatus === 'Completo' ? <p className={`${styles.pickupStatus} ${styles.completed}`}><LuCircleCheckBig />{order.pickupStatus}</p> : null}
+                            {order.pickupStatus === 'Canceled' ? <p className={`${styles.pickupStatus} ${styles.canceled}`}><LuCircleAlert />{order.pickupStatus}</p> : null}
                             <h3>{formatDate(order.pickupTime)}</h3>
                             {order.orderItems.map((item) => (
                                 <div key={item._id}>

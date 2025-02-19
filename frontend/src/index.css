@@ -2,11 +2,24 @@
   margin: 0;
   padding: 0;
   text-decoration: none;
+  font-family: 'Inter';
 }
 #root {
   font-size: x-large;
+  background-color: #ebe7d9;
+  min-height: 100vh;
+  color: #000546;
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 button {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  justify-content: center;
   width: fit-content;
   background-color: #000546;
   color: #faf0ca;
@@ -14,4 +27,8 @@ button {
   padding: 1em;
   border-radius: 0.5em;
   cursor: pointer;
+}
+p {
+  display: flex;
+  gap: 0.2em;
 }

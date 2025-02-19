@@ -115,7 +115,7 @@ export default class OrdersDataAccess {
         const { items, ...orderDataRest } = orderData
 
         orderDataRest.createdAt = new Date()
-        orderDataRest.pickupStatus = 'Pending'
+        orderDataRest.pickupStatus = 'Pendente'
         orderDataRest.userId = new ObjectId(orderDataRest.userId)
 
         const newOrder = await Mongo.db
