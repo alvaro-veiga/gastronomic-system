@@ -11,6 +11,7 @@ export function CartProvider({children}) {
             return cartItems._id === itemToAdd._id
         })
         if (!checkItemAlready) {
+            itemToAdd.quantity = 1
             setCartItems([...cartItems, itemToAdd])
             console.log('item adicionado com sucesso')
         } else {
