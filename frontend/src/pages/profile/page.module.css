@@ -34,6 +34,10 @@
 .canceled {
     background-color: #ce651a;
 }
+.platesLink {
+    color: #000546;
+    text-decoration: underline;
+}
 @media screen and (max-width: 800px) {
     
     .ordersContainer {

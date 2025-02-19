@@ -5,6 +5,7 @@ import orderServices from "../../services/orders"
 import { format, parseISO } from 'date-fns';
 import styles from './page.module.css'
 import { LuLogOut, LuTimer, LuCircleCheckBig, LuCircleAlert } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const formatDate = (isoString) => {
     return format(parseISO(isoString), "dd/MM/yyyy HH:mm");
@@ -63,7 +64,8 @@ export default function Profile() {
                 </div>
                 :
                 <div>
-                    Voce não tem pedidos ainda
+                    Voce não tem pedidos ainda.
+                    <Link to={'/plates'} className={styles.platesLink}>Clique aqui para ver nossas especialidades</Link>
                 </div>
             }
         </div>
