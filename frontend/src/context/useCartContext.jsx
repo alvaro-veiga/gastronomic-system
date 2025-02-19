@@ -13,18 +13,23 @@ export function CartProvider({children}) {
         if (!checkItemAlready) {
             itemToAdd.quantity = 1
             setCartItems([...cartItems, itemToAdd])
-            console.log('item adicionado com sucesso')
+            console.log('Item adicionado com sucesso')
         } else {
             console.log('O item ja esta no seu carrinho')
         }
     }
 
     const removeFromCart = (itemId) => {
+        const cartItemsSanitized = cartItems.filter((item) => item._id !== itemId);
+        setCartItems(cartItemsSanitized)
+    };
 
+    const updateCartItems = (items) => {
+        setCartItems(items)
     }
 
     return(
-        <CartContext.Provider value={{ removeFromCart, addToCart, cartItems}}>
+        <CartContext.Provider value={{ removeFromCart, addToCart, cartItems, updateCartItems}}>
             {children}
         </CartContext.Provider>
     )
