@@ -6,7 +6,10 @@
     background-color: #faf0ca;
 	color: #000546;
 }
-
+.popupContainer p {
+    display: flex;
+    flex-direction: column;
+}
 .confirmBtns {
     display: flex;
     gap: .5em;

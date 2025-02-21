@@ -10,8 +10,23 @@ export default function ConfirmOrderPopup({ open, onClose, onConfirm }) {
     const authData = JSON.parse(localStorage.getItem('auth'))
     const navigate = useNavigate()
 
-    const handleConfirm = () => {
-        onConfirm(orderData)
+    const handleConfirm = (e) => {
+        e.preventDefault()
+
+        if(!authData?.user?._id) {
+            return navigate('/auth')
+        } else {
+            if(!formData?.pickupTime) {
+                return 
+            } else {
+                const orderData = {
+                    userId: authData?.user?._id,
+                    pickupTime: formData?.pickupTime
+                }
+
+                onConfirm(orderData)
+            }
+        }
     }
 
     const handleFormDataChange = (e) => {
