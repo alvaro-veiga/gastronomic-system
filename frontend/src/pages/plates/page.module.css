@@ -1,0 +1,23 @@
+.cardContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Cria duas colunas */
+    gap: 20px; /* Espaçamento entre os cards */
+    width: 100%;
+    max-width: 1200px; /* Define um limite máximo */
+    margin: 0 auto; /* Centraliza o container na tela */
+    padding: 20px;
+}
+
+.cardContainer > div {
+    flex: 1 1 calc(50% - 16px); /* Cada card ocupa 50% da largura menos o espaçamento */
+    max-width: 48%; /* Limita para garantir que fique dentro de 50% da tela */
+    min-width: 300px; /* Evita que fique muito pequeno em telas menores */
+    display: flex;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .cardContainer > div {
+        grid-template-columns: 1fr;
+    }
+}
